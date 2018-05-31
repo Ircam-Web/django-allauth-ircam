@@ -1,25 +1,19 @@
 from setuptools import setup, find_packages
 from organization import __version__
-import subprocess
+from os import path
 
-def get_long_desc():
-    """Use Pandoc to convert the readme to ReST for the PyPI."""
-    try:
-        return subprocess.check_output(['pandoc', '-f', 'markdown', '-t', 'rst', 'README.md'])
-    except:
-        print("WARNING: The long readme wasn't converted properly")
+here = path.abspath(path.dirname(__file__))
 
-readme = open('README.rst', 'r')
-long_desc = readme.read()
+with open(path.join(here, 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
 
 setup(name='django-allauth-ircam',
-    version=__version__,
-    description='Ircam OAuth2 provider for django-allauth',
-    long_description=long_desc,
-    author='Raphaël Voyazopoulos',
-    author_email='raphael.voyazopoulos@ircam.fr',
-    url='https://github.com/Ircam-Web/django-allauth-ircam',
-    packages=find_packages(),
-    zip_safe=False,
-    include_package_data=True,
-)
+      version=__version__,
+      description='Ircam OAuth2 provider for django-allauth',
+      long_description=long_description,
+      author='Raphaël Voyazopoulos',
+      author_email='raphael.voyazopoulos@ircam.fr',
+      url='https://github.com/Ircam-Web/django-allauth-ircam',
+      packages=find_packages(),
+      zip_safe=False,
+      include_package_data=True)
