@@ -6,9 +6,9 @@ from django.conf import settings
 
 class IrcamAuthAdapter(OAuth2Adapter):
 
-    if not hasattr(settings, 'settings.OAUTH_SERVER_BASEURL'):
+    if not hasattr(settings, 'OAUTH_SERVER_BASEURL'):
         raise Exception("Couldn't find OAUTH_SERVER_BASEURL in the settings")
-    if not hasattr(settings, 'settings.OAUTH_SERVER_BASEURL_EXTERNAL'):
+    if not hasattr(settings, 'OAUTH_SERVER_BASEURL_EXTERNAL'):
         raise Exception("Couldn't find OAUTH_SERVER_BASEURL_EXTERNAL in the settings")
 
     provider_id = IrcamAuthProvider.id
