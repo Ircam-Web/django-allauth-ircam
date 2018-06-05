@@ -1,6 +1,8 @@
 from allauth.socialaccount import providers
 from allauth.socialaccount.providers.base import ProviderAccount
 from allauth.socialaccount.providers.oauth2.provider import OAuth2Provider
+from django.dispatch import receiver
+from allauth.socialaccount.signals import social_account_updated
 
 
 class IrcamAuthAccount(ProviderAccount):
@@ -34,6 +36,14 @@ class IrcamAuthProvider(OAuth2Provider):
     def get_default_scope(self):
         scope = ['read']
         return scope
+
+
+@receiver(social_account_updated)
+def handler(sender, **kwargs):
+    from pprint import pprint
+    local_user = kwargs['sociallogin'].user
+    updated_data = kwargs['sociallogin'].account.extra_data
+    # TODO: update local_user with updated_data received from the remote provider
 
 
 providers.registry.register(IrcamAuthProvider)
