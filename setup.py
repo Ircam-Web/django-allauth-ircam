@@ -1,5 +1,4 @@
 from setuptools import setup, find_packages
-from organization import __version__
 from os import path
 
 here = path.abspath(path.dirname(__file__))
@@ -8,7 +7,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(name='django-allauth-ircam',
-      version=__version__,
+      version="0.1.0",
       description='Ircam OAuth2 provider for django-allauth',
       long_description=long_description,
       author='Raphaël Voyazopoulos',
