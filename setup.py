@@ -1,4 +1,5 @@
 from setuptools import setup, find_packages
+from ircam_oauth2_provider import __version__
 from os import path
 
 here = path.abspath(path.dirname(__file__))
