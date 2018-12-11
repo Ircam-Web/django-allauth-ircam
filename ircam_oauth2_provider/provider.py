@@ -29,11 +29,15 @@ class IrcamAuthProvider(OAuth2Provider):
         return dict(username=data['username'],
                     email=data['email'],
                     first_name=data['first_name'],
-                    last_name=data['last_name'],)
+                    last_name=data['last_name'],
+                    avatar=data['avatar'],)
 
     def get_default_scope(self):
         scope = ['read']
         return scope
+
+    def get_avatar_url(self):
+        return self.account.extra_data.get('avatar')
 
 
 providers.registry.register(IrcamAuthProvider)
