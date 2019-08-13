@@ -8,12 +8,10 @@ class IrcamAuthAdapter(OAuth2Adapter):
 
     if not hasattr(settings, 'OAUTH_SERVER_BASEURL'):
         raise Exception("Couldn't find OAUTH_SERVER_BASEURL in the settings")
-    if not hasattr(settings, 'OAUTH_SERVER_BASEURL_EXTERNAL'):
-        raise Exception("Couldn't find OAUTH_SERVER_BASEURL_EXTERNAL in the settings")
 
     provider_id = IrcamAuthProvider.id
     access_token_url = '{}/o/token/'.format(settings.OAUTH_SERVER_BASEURL)  # Called programmatically, must be reachable from container
-    authorize_url = '{}/o/authorize/'.format(settings.OAUTH_SERVER_BASEURL_EXTERNAL)  # Accessed by the client so must be host-reachable
+    authorize_url = '{}/o/authorize/'.format(settings.OAUTH_SERVER_BASEURL)  # Accessed by the client so must be host-reachable
     profile_url = '{}/profile/'.format(settings.OAUTH_SERVER_BASEURL)
 
     def complete_login(self, request, app, token, **kwargs):
