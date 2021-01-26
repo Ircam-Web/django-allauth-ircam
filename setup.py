@@ -16,4 +16,8 @@ setup(name='django-allauth-ircam',
       url='https://github.com/Ircam-Web/django-allauth-ircam',
       packages=find_packages(),
       zip_safe=False,
-      include_package_data=True)
+      include_package_data=True,
+      install_requires=[
+          "django-allauth==0.34.0"
+      ]
+      )
