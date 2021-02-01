@@ -33,7 +33,7 @@ def serverLogout(request):
         if not hasattr(settings, 'USER_SERVER_BASEURL'):
             return redirect("/")
         else:
-            return redirect(settings.USER_SERVER_BASEURL+"/accounts/logout/?next=/")
+            return redirect(settings.USER_SERVER_BASEURL+"/accounts/logout/?next=/redirect/www")
 
 oauth2_login = OAuth2LoginView.adapter_view(IrcamAuthAdapter)
 oauth2_callback = OAuth2CallbackView.adapter_view(IrcamAuthAdapter)
