@@ -20,6 +20,7 @@ class IrcamAuthAdapter(OAuth2Adapter):
         headers = {'Authorization': 'Bearer {0}'.format(token.token)}
         resp = requests.get(self.profile_url, headers=headers)
         extra_data = resp.json()
+        print(extra_data)
         if getattr(settings, 'OAUTH2_IRCAM', False):
             create_or_update_local_entities(extra_data)
         return self.get_provider().sociallogin_from_response(request, extra_data)
@@ -29,7 +30,10 @@ def serverLogout(request):
         pass
     else :
         logout(request)
-    return redirect("/")
+        if not hasattr(settings, 'USER_SERVER_BASEURL'):
+            return redirect("/")
+        else:
+            return redirect(settings.USER_SERVER_BASEURL+"/accounts/logout/?next=/")
 
 oauth2_login = OAuth2LoginView.adapter_view(IrcamAuthAdapter)
 oauth2_callback = OAuth2CallbackView.adapter_view(IrcamAuthAdapter)
