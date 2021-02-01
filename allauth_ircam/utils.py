@@ -4,6 +4,7 @@ from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
+from django.contrib.auth.models import Group
 
 logger = logging.getLogger('app')
 
@@ -42,6 +43,19 @@ def create_or_update_local_user(extra_data):
             update_localuser(user, extra_data) 
     return user
 
+def update_ircamintern_group(user,extra_data):
+    if getattr(settings, 'ORGANIZATION_INTERN_USERS_GROUP', False):
+        group_name = settings.ORGANIZATION_INTERN_USERS_GROUP
+        intern_users, created = Group.objects.get_or_create(name=group_name)
+        is_user_intern = user.groups.filter(name = group_name).exists()
+        if is_user_intern and extra_data['is_ldap_user'] == False:
+            user.groups.remove(intern_users)
+            user.save()
+        if is_user_intern == False and extra_data['is_ldap_user'] == True :
+            user.groups.add(intern_users)
+    else:
+        pass
+
 def create_or_update_local_entities(extra_data):
     ''' 
     Create or Update entities in relationship with datas contained in extra_data
@@ -71,3 +85,5 @@ def create_or_update_local_entities(extra_data):
     else :
         user = User.objects.get(id = soc_accounts[0].user_id)
         update_localuser(user, extra_data)
+
+    update_ircamintern_group(user,extra_data)
