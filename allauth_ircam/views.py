@@ -1,10 +1,12 @@
 import requests
 from allauth.socialaccount.providers.oauth2.views import (OAuth2Adapter, OAuth2LoginView, OAuth2CallbackView)
+from allauth.socialaccount.models import SocialApp
 from .provider import IrcamAuthProvider
 from .utils import create_or_update_local_entities
 from django.conf import settings
 from django.contrib.auth import logout
 from django.shortcuts import redirect
+from django.utils.encoding import filepath_to_uri
 
 class IrcamAuthAdapter(OAuth2Adapter):
 
@@ -33,7 +35,11 @@ def serverLogout(request):
         if not hasattr(settings, 'USER_SERVER_BASEURL'):
             return redirect("/")
         else:
-            return redirect(settings.USER_SERVER_BASEURL+"/accounts/logout/?next=/redirect/www")
+            if hasattr(settings, 'LOCAL_CLIENTAPP'):
+                return redirect(settings.USER_SERVER_BASEURL+"/accounts/logout/?next=/logout_redirect/"+filepath_to_uri(settings.LOCAL_CLIENTAPP))
+            else:
+                app = SocialApp.objects.filter(provider='ircamauth')[0]
+                return redirect(settings.USER_SERVER_BASEURL+"/accounts/logout/?next=/logout_redirect/"+filepath_to_uri(app.name))
 
 oauth2_login = OAuth2LoginView.adapter_view(IrcamAuthAdapter)
 oauth2_callback = OAuth2CallbackView.adapter_view(IrcamAuthAdapter)
