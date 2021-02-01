@@ -44,6 +44,11 @@ def create_or_update_local_user(extra_data):
     return user
 
 def update_ircamintern_group(user,extra_data):
+    '''
+    If settings.ORGANIZATION_INTERN_USERS_GROUP is defined:
+    1. automatic group creation if needed
+    2. insertion/remove of the user, following is_ldap_user boolean coming from auth server
+    '''
     if getattr(settings, 'ORGANIZATION_INTERN_USERS_GROUP', False):
         group_name = settings.ORGANIZATION_INTERN_USERS_GROUP
         intern_users, created = Group.objects.get_or_create(name=group_name)
