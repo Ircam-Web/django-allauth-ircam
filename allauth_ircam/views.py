@@ -32,7 +32,7 @@ def serverLogout(request):
         pass
     else :
         logout(request)
-        if not hasattr(settings, 'USER_SERVER_BASEURL'):
+        if not getattr(settings, 'OAUTH2_IRCAM', False):
             return redirect("/")
         else:
             if hasattr(settings, 'LOCAL_CLIENTAPP'):
