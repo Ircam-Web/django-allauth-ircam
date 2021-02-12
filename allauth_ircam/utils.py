@@ -47,16 +47,16 @@ def update_ircamintern_group(user,extra_data):
     '''
     If settings.ORGANIZATION_INTERN_USERS_GROUP is defined:
     1. automatic group creation if needed
-    2. insertion/remove of the user, following is_ldap_user boolean coming from auth server
+    2. insertion/remove of the user, following is_internal_user boolean coming from auth server
     '''
     if getattr(settings, 'ORGANIZATION_INTERN_USERS_GROUP', False):
         group_name = settings.ORGANIZATION_INTERN_USERS_GROUP
         intern_users, created = Group.objects.get_or_create(name=group_name)
         is_user_intern = user.groups.filter(name = group_name).exists()
-        if is_user_intern and extra_data['is_ldap_user'] == False:
+        if is_user_intern and extra_data['is_internal_user'] == False:
             user.groups.remove(intern_users)
             user.save()
-        if is_user_intern == False and extra_data['is_ldap_user'] == True :
+        if is_user_intern == False and extra_data['is_internal_user'] == True :
             user.groups.add(intern_users)
     else:
         pass

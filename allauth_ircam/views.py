@@ -39,7 +39,7 @@ def serverLogout(request):
                 return redirect(settings.USER_SERVER_BASEURL+"/accounts/logout/?next=/logout_redirect/"+filepath_to_uri(settings.LOCAL_CLIENTAPP))
             else:
                 app = SocialApp.objects.filter(provider='ircamauth')[0]
-                return redirect(settings.USER_SERVER_BASEURL+"/accounts/logout/?next=/logout_redirect/"+filepath_to_uri(app.name))
+                return redirect(settings.USER_SERVER_BASEURL+"/accounts/logout/?next=/logout_redirect/"+filepath_to_uri(app.client_id))
 
 oauth2_login = OAuth2LoginView.adapter_view(IrcamAuthAdapter)
 oauth2_callback = OAuth2CallbackView.adapter_view(IrcamAuthAdapter)
