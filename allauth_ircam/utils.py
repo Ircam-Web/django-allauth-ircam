@@ -49,6 +49,9 @@ def update_ircamintern_group(user,extra_data):
     1. automatic group creation if needed
     2. insertion/remove of the user, following is_internal_user boolean coming from auth server
     '''
+    if 'is_internal_user' not in extra_data:
+        return
+
     if getattr(settings, 'ORGANIZATION_INTERN_USERS_GROUP', False):
         group_name = settings.ORGANIZATION_INTERN_USERS_GROUP
         intern_users, created = Group.objects.get_or_create(name=group_name)

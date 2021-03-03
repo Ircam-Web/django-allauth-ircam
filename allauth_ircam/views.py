@@ -27,6 +27,12 @@ class IrcamAuthAdapter(OAuth2Adapter):
             create_or_update_local_entities(extra_data)
         return self.get_provider().sociallogin_from_response(request, extra_data)
 
+def next_url(request):
+    """
+    Returns URL to redirect to from the ``next`` param in the request.
+    """
+    return request.GET.get("next", None)
+
 def serverLogout(request):
     if not request.user.is_authenticated:
         pass
@@ -35,11 +41,12 @@ def serverLogout(request):
         if not getattr(settings, 'OAUTH2_IRCAM', False):
             return redirect("/")
         else:
-            if hasattr(settings, 'LOCAL_CLIENTAPP'):
-                return redirect(settings.USER_SERVER_BASEURL+"/accounts/logout/?next=/logout_redirect/"+filepath_to_uri(settings.LOCAL_CLIENTAPP))
-            else:
-                app = SocialApp.objects.filter(provider='ircamauth')[0]
-                return redirect(settings.USER_SERVER_BASEURL+"/accounts/logout/?next=/logout_redirect/"+filepath_to_uri(app.client_id))
+            next_u = next_url(request)
+            if next_u is None:
+                next_u = "/"
+            
+            next_u = request.build_absolute_uri("/") + next_u[1:]
+            return redirect(settings.USER_SERVER_BASEURL+"/logout/?next="+ next_u)
 
 oauth2_login = OAuth2LoginView.adapter_view(IrcamAuthAdapter)
 oauth2_callback = OAuth2CallbackView.adapter_view(IrcamAuthAdapter)
